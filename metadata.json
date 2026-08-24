@@ -1,0 +1,6 @@
+{
+  "name": "ArtisHub",
+  "description": "Plateforme communautaire pour artistes, publication de BD & artworks, recherche de collaborateurs et forum d'échange.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
