@@ -20,7 +20,7 @@ export const PostWorkModal: React.FC<PostWorkModalProps> = ({
   const [category, setCategory] = useState<ProjectCategory>('BD & Manga');
   const [status, setStatus] = useState<ProjectStatus>('En recherche de collaborateurs');
   const [imageUrl, setImageUrl] = useState('');
-  const [tagsInput, setTagsInput] = useState('Cyberpunk, BD, Action');
+  const [tagsInput, setTagsInput] = useState('Créatif, Portfolio, Collaboration');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -66,7 +66,7 @@ export const PostWorkModal: React.FC<PostWorkModalProps> = ({
 
       await addProject({
         title: title.trim(),
-        description: description.trim() || 'Nouvelle publication artistique sur ArtisHub.',
+        description: description.trim() || 'Nouvelle publication créative ou technique sur ArtisHub.',
         author: currentUser.displayName,
         authorUid: currentUser.uid,
         authorHandle: currentUser.handle,
@@ -74,7 +74,7 @@ export const PostWorkModal: React.FC<PostWorkModalProps> = ({
         authorRole: currentUser.role,
         imageUrl: imageUrl.trim(),
         category,
-        tags: parsedTags.length > 0 ? parsedTags : ['Artwork'],
+        tags: parsedTags.length > 0 ? parsedTags : ['Portfolio'],
         status,
       });
 
@@ -127,13 +127,13 @@ export const PostWorkModal: React.FC<PostWorkModalProps> = ({
           {/* Title */}
           <div>
             <label className="block text-[11px] font-mono uppercase tracking-widest text-[#cfc2d6] mb-1.5">
-              Titre de l'œuvre *
+              Titre du projet *
             </label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="ex: Chroniques de Neo-Kyoto - Planche 12"
+              placeholder="ex: Chroniques de Neo-Kyoto ou tableau de bord React"
               required
               className="w-full bg-[#2a2a2c]/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-[#e5e1e4] placeholder-[#cfc2d6]/40 focus:outline-none focus:border-[#ddb7ff]"
             />
@@ -156,6 +156,9 @@ export const PostWorkModal: React.FC<PostWorkModalProps> = ({
                 <option value="Storyboards">Storyboards</option>
                 <option value="Concept Art">Concept Art</option>
                 <option value="Illustration">Illustration</option>
+                <option value="Web Development">Développement web</option>
+                <option value="Mobile App">Application mobile</option>
+                <option value="Game Development">Développement de jeu</option>
               </select>
             </div>
 

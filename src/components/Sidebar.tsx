@@ -5,6 +5,9 @@ import {
   Box, 
   BookOpen, 
   Film, 
+  Code2,
+  Smartphone,
+  Gamepad2,
   Compass, 
   Sparkles, 
   Tag, 
@@ -33,6 +36,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { name: '3D Modeling', label: '3D Modeling', icon: <Box className="w-4 h-4" /> },
     { name: 'BD & Manga', label: 'BD & Manga', icon: <BookOpen className="w-4 h-4" /> },
     { name: 'Storyboards', label: 'Storyboards', icon: <Film className="w-4 h-4" /> },
+    { name: 'Web Development', label: 'Développement web', icon: <Code2 className="w-4 h-4" /> },
+    { name: 'Mobile App', label: 'Applications mobiles', icon: <Smartphone className="w-4 h-4" /> },
+    { name: 'Game Development', label: 'Développement jeu', icon: <Gamepad2 className="w-4 h-4" /> },
   ];
 
   const trendingTags = [
@@ -42,6 +48,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { name: 'DarkFantasy', count: '520', color: 'primary' },
     { name: 'Webtoon', count: '410', color: 'secondary' },
     { name: 'Mecha', count: '380', color: 'tertiary' },
+    { name: 'react', count: '320', color: 'secondary' },
+    { name: 'gamedev', count: '270', color: 'primary' },
   ];
 
   return (
@@ -154,10 +162,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <div className="p-4 mx-3 mb-4 rounded-xl bg-white/[0.03] border border-white/5 text-[11px] text-[#cfc2d6]/60">
         <div className="flex items-center gap-1.5 text-[#e5e1e4] font-medium mb-1">
           <Tag className="w-3 h-3 text-[#ddb7ff]" />
-          <span>Hub Créatif & BD</span>
+          <span>Hub créatif & tech</span>
         </div>
         <p className="line-clamp-2">
-          Partagez vos planches, recrutez des talents et rejoignez les discussions.
+          Partagez vos projets, recrutez des talents et rejoignez les discussions.
         </p>
       </div>
     </aside>

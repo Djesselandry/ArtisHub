@@ -45,6 +45,17 @@ export const DEMO_USERS: UserProfile[] = [
     followersCount: 2100,
     likesCount: 8900,
   },
+  {
+    uid: 'user_nova_dev',
+    email: 'nova@artishub.io',
+    displayName: 'Nova Dev',
+    handle: '@NovaDev',
+    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=300&q=80',
+    role: 'Full-stack Developer',
+    bio: 'Développeur full-stack, passionné par les produits créatifs, les jeux et les expériences interactives.',
+    followersCount: 760,
+    likesCount: 2180,
+  },
 ];
 
 export const INITIAL_PROJECTS: Project[] = [

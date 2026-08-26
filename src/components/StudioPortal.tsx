@@ -23,7 +23,7 @@ export const StudioPortal: React.FC<StudioPortalProps> = ({
   const [email, setEmail] = useState('creator@artishub.io');
   const [password, setPassword] = useState('pass1234');
   const [displayName, setDisplayName] = useState('');
-  const [role, setRole] = useState('Digital Illustrator');
+  const [role, setRole] = useState('Créatif / Développeur');
   const [remember, setRemember] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [huskyState, setHuskyState] = useState<HuskyState>('idle');
@@ -186,7 +186,7 @@ export const StudioPortal: React.FC<StudioPortalProps> = ({
             <>
               <div className="flex flex-col gap-1.5">
                 <label className="text-[11px] font-mono uppercase tracking-widest text-[#cfc2d6] ml-1">
-                  Nom d'artiste / Pseudo
+                  Nom / Pseudo
                 </label>
                 <input
                   type="text"
@@ -213,6 +213,12 @@ export const StudioPortal: React.FC<StudioPortalProps> = ({
                   <option value="3D Modeler / Sculptor">Modélisateur 3D / Props</option>
                   <option value="Concept Artist">Concept Artist / Environnements</option>
                   <option value="Storyboarder">Storyboarder / Animateur</option>
+                  <option value="Frontend Developer">Développeur Frontend</option>
+                  <option value="Backend Developer">Développeur Backend</option>
+                  <option value="Full-stack Developer">Développeur Full-stack</option>
+                  <option value="Mobile Developer">Développeur Mobile</option>
+                  <option value="Game Developer">Développeur Jeu Vidéo</option>
+                  <option value="UI/UX Designer">Designer UI/UX</option>
                 </select>
               </div>
             </>
@@ -243,7 +249,7 @@ export const StudioPortal: React.FC<StudioPortalProps> = ({
               </label>
               <button
                 type="button"
-                onClick={() => alert('Astuce démo : Utilisez n\'importe quel mot de passe ou cliquez sur un profil d\'artiste ci-dessous !')}
+                onClick={() => alert('Astuce démo : Utilisez n\'importe quel mot de passe ou cliquez sur un profil ci-dessous !')}
                 className="text-[11px] font-mono text-[#ddb7ff] hover:text-[#f0dbff] transition-colors"
               >
                 Forgot?
@@ -323,7 +329,7 @@ export const StudioPortal: React.FC<StudioPortalProps> = ({
           </p>
         </div>
 
-        {/* Quick Demo Artists Switcher */}
+        {/* Quick Demo Profile Switcher */}
         <div className="mt-6 pt-5 border-t border-white/10 relative z-10">
           <div className="flex items-center justify-between mb-3">
             <span className="text-[10px] font-mono uppercase tracking-wider text-[#cfc2d6]/60">

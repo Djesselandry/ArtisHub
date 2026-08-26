@@ -71,7 +71,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="Rechercher œuvres, artistes, tags..."
+            placeholder="Rechercher projets, talents, tags..."
             className="bg-[#353437]/50 border border-white/10 rounded-full py-2 pl-10 pr-4 text-xs text-[#e5e1e4] placeholder-[#cfc2d6]/50 focus:outline-none focus:border-[#5de6ff] focus:ring-1 focus:ring-[#5de6ff] transition-all w-60 md:w-72"
           />
           {searchQuery && (
@@ -186,7 +186,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 {/* Switch Demo user list */}
                 <div className="py-1">
                   <div className="text-[10px] font-mono uppercase tracking-wider text-[#cfc2d6]/50 px-2 py-1">
-                    Changer de compte créateur
+                    Changer de compte
                   </div>
                   <div className="flex flex-col gap-1 max-h-40 overflow-y-auto">
                     {DEMO_USERS.map((u) => (
@@ -277,7 +277,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 currentTab === 'feed' ? 'bg-[#ddb7ff]/10 text-[#ddb7ff]' : 'text-[#cfc2d6]'
               }`}
             >
-              🎨 Feed & Galerie d'œuvres
+              ✨ Feed & Galerie de projets
             </button>
             <button
               onClick={() => {
@@ -311,7 +311,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               }}
               className="flex-1 py-2 bg-[#ddb7ff]/15 text-[#ddb7ff] rounded-xl text-xs font-mono text-center font-semibold"
             >
-              + Publier Œuvre
+              + Publier Projet
             </button>
             <button
               onClick={() => {

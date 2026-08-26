@@ -11,6 +11,7 @@ import {
   getFirestore, 
   collection, 
   getDocs, 
+  getDoc,
   doc, 
   setDoc, 
   addDoc, 
@@ -104,6 +105,30 @@ const collabListeners = new Set<Listener<CollaborationAd[]>>();
 const forumListeners = new Set<Listener<ForumTopic[]>>();
 const authListeners = new Set<Listener<UserProfile | null>>();
 
+const getLiveUserProfile = async (fbUser: FirebaseUser): Promise<UserProfile | null> => {
+  if (!isFirebaseLive || !dbInstance) return null;
+
+  try {
+    const userSnapshot = await getDoc(doc(dbInstance, 'users', fbUser.uid));
+    if (!userSnapshot.exists()) return null;
+    return { uid: fbUser.uid, ...(userSnapshot.data() as Omit<UserProfile, 'uid'>) };
+  } catch (err) {
+    console.warn('Could not load user profile from Firestore:', err);
+    return null;
+  }
+};
+
+const saveLiveUserProfile = async (profile: UserProfile) => {
+  if (!isFirebaseLive || !dbInstance) return;
+
+  try {
+    await setDoc(doc(dbInstance, 'users', profile.uid), profile);
+  } catch (err) {
+    // Authentication remains usable if Firestore rules have not yet been configured.
+    console.warn('Could not save user profile to Firestore:', err);
+  }
+};
+
 const notifyProjects = () => {
   localStorage.setItem(STORAGE_KEYS.PROJECTS, JSON.stringify(localProjects));
   projectListeners.forEach((l) => l([...localProjects]));
@@ -162,16 +187,17 @@ export const subscribeToAuth = (callback: (user: UserProfile | null) => void) =>
   callback(localCurrentUser);
 
   if (isFirebaseLive && authInstance) {
-    const unsubscribe = onAuthStateChanged(authInstance, (fbUser: FirebaseUser | null) => {
+    const unsubscribe = onAuthStateChanged(authInstance, async (fbUser: FirebaseUser | null) => {
       if (fbUser) {
-        const found = DEMO_USERS.find((u) => u.email === fbUser.email) || customUsers.find((u) => u.email === fbUser.email);
+        const savedProfile = await getLiveUserProfile(fbUser);
+        const found = savedProfile || DEMO_USERS.find((u) => u.email === fbUser.email) || customUsers.find((u) => u.email === fbUser.email);
         const profile: UserProfile = found || {
           uid: fbUser.uid,
           email: fbUser.email || 'user@artishub.io',
-          displayName: fbUser.displayName || fbUser.email?.split('@')[0] || 'Artist',
+          displayName: fbUser.displayName || fbUser.email?.split('@')[0] || 'Membre',
           avatar: fbUser.photoURL || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
-          role: 'Creator & Artist',
-          handle: `@${(fbUser.displayName || fbUser.email?.split('@')[0] || 'artist').replace(/\s+/g, '_')}`,
+          role: 'Créatif / Développeur',
+          handle: `@${(fbUser.displayName || fbUser.email?.split('@')[0] || 'member').replace(/\s+/g, '_')}`,
           followersCount: 0,
           likesCount: 0,
         };
@@ -202,9 +228,10 @@ export const signIn = async (email: string, pass: string): Promise<UserProfile> 
       email: cred.user.email || email,
       displayName: cred.user.displayName || email.split('@')[0],
       avatar: cred.user.photoURL || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80',
-      role: 'Digital Artist',
+      role: 'Créatif / Développeur',
       handle: `@${email.split('@')[0]}`,
     };
+    await saveLiveUserProfile(profile);
     localCurrentUser = profile;
     notifyAuth();
     return profile;
@@ -227,7 +254,7 @@ export const signIn = async (email: string, pass: string): Promise<UserProfile> 
     email: email,
     displayName: email.split('@')[0].replace('.', ' ').replace(/^\w/, (c) => c.toUpperCase()),
     avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=300&q=80',
-    role: 'Concept Artist',
+    role: 'Créatif / Développeur',
     handle: `@${email.split('@')[0].replace(/\W/g, '_')}`,
     followersCount: 1,
     likesCount: 0,
@@ -240,7 +267,7 @@ export const signIn = async (email: string, pass: string): Promise<UserProfile> 
   return newProfile;
 };
 
-export const signUp = async (email: string, pass: string, displayName: string, role = 'Digital Artist'): Promise<UserProfile> => {
+export const signUp = async (email: string, pass: string, displayName: string, role = 'Créatif / Développeur'): Promise<UserProfile> => {
   if (isFirebaseLive && authInstance) {
     const cred = await createUserWithEmailAndPassword(authInstance, email, pass);
     const newProfile: UserProfile = {
@@ -253,6 +280,7 @@ export const signUp = async (email: string, pass: string, displayName: string, r
       followersCount: 0,
       likesCount: 0,
     };
+    await saveLiveUserProfile(newProfile);
     localCurrentUser = newProfile;
     notifyAuth();
     return newProfile;

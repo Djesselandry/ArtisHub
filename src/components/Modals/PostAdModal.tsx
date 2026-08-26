@@ -131,7 +131,7 @@ export const PostAdModal: React.FC<PostAdModalProps> = ({
                     : 'bg-white/5 border-white/10 text-[#cfc2d6]'
                 }`}
               >
-                <span>⚡ ARTISTE DISPONIBLE (AVAILABLE)</span>
+                <span>⚡ TALENT DISPONIBLE (AVAILABLE)</span>
               </button>
             </div>
           </div>
@@ -168,6 +168,12 @@ export const PostAdModal: React.FC<PostAdModalProps> = ({
                 <option value="3D Modeler">Modélisateur 3D / Props</option>
                 <option value="Storyboarder">Storyboarder</option>
                 <option value="Sound Designer">Sound Designer / Compositeur</option>
+                <option value="Frontend Developer">Développeur Frontend</option>
+                <option value="Backend Developer">Développeur Backend</option>
+                <option value="Full-stack Developer">Développeur Full-stack</option>
+                <option value="Mobile Developer">Développeur Mobile</option>
+                <option value="Game Developer">Développeur Jeu Vidéo</option>
+                <option value="UI/UX Designer">Designer UI/UX</option>
               </select>
             </div>
 
@@ -183,6 +189,9 @@ export const PostAdModal: React.FC<PostAdModalProps> = ({
                 <option value="Comic / Manga">BD / Manga / Webtoon</option>
                 <option value="Video Game">Jeu Vidéo Indé</option>
                 <option value="Animation">Série / Court-métrage Animé</option>
+                <option value="Web App">Site web / Application web</option>
+                <option value="Mobile App">Application mobile</option>
+                <option value="Software / SaaS">Logiciel / SaaS</option>
                 <option value="Commission">Commission / Freelance</option>
                 <option value="Other">Autre projet créatif</option>
               </select>

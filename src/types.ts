@@ -11,7 +11,16 @@ export interface UserProfile {
   isCustomAccount?: boolean;
 }
 
-export type ProjectCategory = 'Digital Art' | '3D Modeling' | 'BD & Manga' | 'Storyboards' | 'Concept Art' | 'Illustration';
+export type ProjectCategory =
+  | 'Digital Art'
+  | '3D Modeling'
+  | 'BD & Manga'
+  | 'Storyboards'
+  | 'Concept Art'
+  | 'Illustration'
+  | 'Web Development'
+  | 'Mobile App'
+  | 'Game Development';
 export type ProjectStatus = 'En recherche de collaborateurs' | 'En cours' | 'Terminé';
 
 export interface ProjectComment {
@@ -48,8 +57,28 @@ export interface Project {
   featured?: boolean;
 }
 
-export type RoleNeeded = 'Illustrator' | 'Writer / Scénariste' | 'Colorist' | '3D Modeler' | 'Storyboarder' | 'Sound Designer';
-export type ProjectType = 'Comic / Manga' | 'Video Game' | 'Animation' | 'Commission' | 'Other';
+export type RoleNeeded =
+  | 'Illustrator'
+  | 'Writer / Scénariste'
+  | 'Colorist'
+  | '3D Modeler'
+  | 'Storyboarder'
+  | 'Sound Designer'
+  | 'Frontend Developer'
+  | 'Backend Developer'
+  | 'Full-stack Developer'
+  | 'Mobile Developer'
+  | 'Game Developer'
+  | 'UI/UX Designer';
+export type ProjectType =
+  | 'Comic / Manga'
+  | 'Video Game'
+  | 'Animation'
+  | 'Web App'
+  | 'Mobile App'
+  | 'Software / SaaS'
+  | 'Commission'
+  | 'Other';
 export type AdStatus = 'HIRING' | 'AVAILABLE';
 
 export interface CollaborationApplication {

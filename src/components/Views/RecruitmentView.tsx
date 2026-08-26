@@ -41,6 +41,12 @@ export const RecruitmentView: React.FC<RecruitmentViewProps> = ({
     '3D Modeler',
     'Storyboarder',
     'Sound Designer',
+    'Frontend Developer',
+    'Backend Developer',
+    'Full-stack Developer',
+    'Mobile Developer',
+    'Game Developer',
+    'UI/UX Designer',
   ];
 
   const filteredAds = ads.filter((ad) => {
@@ -72,7 +78,7 @@ export const RecruitmentView: React.FC<RecruitmentViewProps> = ({
             Recherche de Collaborateurs & Offres
           </h1>
           <p className="text-xs sm:text-sm text-[#cfc2d6]/80 max-w-xl">
-            Trouvez les talents idéaux pour vos BD, mangas, webtoons et projets 3D. Rémunéré ou RevShare.
+            Trouvez les talents idéaux pour vos projets créatifs, jeux, sites et applications. Rémunéré ou RevShare.
           </p>
         </div>
 
