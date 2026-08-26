@@ -23,6 +23,7 @@ import { StudioPortal } from './components/StudioPortal';
 import { FeedView } from './components/Views/FeedView';
 import { RecruitmentView } from './components/Views/RecruitmentView';
 import { ForumView } from './components/Views/ForumView';
+import { WeatherView } from './components/Views/WeatherView';
 
 // Modals
 import { PostWorkModal } from './components/Modals/PostWorkModal';
@@ -32,10 +33,14 @@ import { ApplyAdModal } from './components/Modals/ApplyAdModal';
 import { CreateThreadModal } from './components/Modals/CreateThreadModal';
 import { ThreadDetailModal } from './components/Modals/ThreadDetailModal';
 import { FirebaseConfigModal } from './components/Modals/FirebaseConfigModal';
+import { WhatsAppSettingsModal } from './components/Modals/WhatsAppSettingsModal';
+import { WhatsAppContactModal } from './components/Modals/WhatsAppContactModal';
+import { WhatsAppFloat } from './components/WhatsAppFloat';
+import { WhatsAppChatWidget } from './components/WhatsAppChatWidget';
 
 export default function App() {
   // Navigation State
-  const [currentTab, setCurrentTab] = useState<'feed' | 'recruitment' | 'forum'>('feed');
+  const [currentTab, setCurrentTab] = useState<'feed' | 'recruitment' | 'forum' | 'weather'>('feed');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -56,6 +61,9 @@ export default function App() {
   const [createThreadModalOpen, setCreateThreadModalOpen] = useState(false);
   const [selectedTopic, setSelectedTopic] = useState<ForumTopic | null>(null);
   const [firebaseConfigModalOpen, setFirebaseConfigModalOpen] = useState(false);
+  const [whatsAppSettingsOpen, setWhatsAppSettingsOpen] = useState(false);
+  const [whatsAppAd, setWhatsAppAd] = useState<CollaborationAd | null>(null);
+  const [chatWidgetOpen, setChatWidgetOpen] = useState(false);
 
   // Subscribe to real-time updates (Firebase Firestore / Reactive Local Store)
   useEffect(() => {
@@ -133,6 +141,7 @@ export default function App() {
           onOpenPostAd={() => setPostAdModalOpen(true)}
           onOpenNewThread={() => setCreateThreadModalOpen(true)}
           onOpenFirebaseConfig={() => setFirebaseConfigModalOpen(true)}
+          onOpenWhatsAppSettings={() => setWhatsAppSettingsOpen(true)}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
         />
@@ -159,6 +168,7 @@ export default function App() {
               currentUser={currentUser}
               onOpenPostAd={() => setPostAdModalOpen(true)}
               onApplyAd={(ad) => setSelectedAdForApply(ad)}
+              onContactWhatsApp={(ad) => setWhatsAppAd(ad)}
               onRequireAuth={() => setAuthModalOpen(true)}
               filterAuthor={filterAuthor}
             />
@@ -173,6 +183,8 @@ export default function App() {
               onRequireAuth={() => setAuthModalOpen(true)}
             />
           )}
+
+          {currentTab === 'weather' && <WeatherView />}
         </main>
       </div>
 
@@ -269,6 +281,22 @@ export default function App() {
       {firebaseConfigModalOpen && (
         <FirebaseConfigModal
           onClose={() => setFirebaseConfigModalOpen(false)}
+        />
+      )}
+      {whatsAppSettingsOpen && currentUser && (
+        <WhatsAppSettingsModal
+          currentUser={currentUser}
+          onClose={() => setWhatsAppSettingsOpen(false)}
+          onSaved={setCurrentUser}
+        />
+      )}
+      {whatsAppAd && <WhatsAppContactModal ad={whatsAppAd} onClose={() => setWhatsAppAd(null)} />}
+
+      {/* WhatsApp Floating Chat Widget */}
+      <WhatsAppFloat onClick={() => setChatWidgetOpen(true)} isOpen={chatWidgetOpen} />
+      {chatWidgetOpen && (
+        <WhatsAppChatWidget
+          onClose={() => setChatWidgetOpen(false)}
         />
       )}
     </div>

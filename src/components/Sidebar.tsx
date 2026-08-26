@@ -12,7 +12,8 @@ import {
   Sparkles, 
   Tag, 
   TrendingUp, 
-  Layers 
+  Layers,
+  Cloud
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -20,7 +21,7 @@ interface SidebarProps {
   onSelectCategory: (category: string | null) => void;
   selectedTag: string | null;
   onSelectTag: (tag: string | null) => void;
-  onSelectTab: (tab: 'feed' | 'recruitment' | 'forum') => void;
+  onSelectTab: (tab: 'feed' | 'recruitment' | 'forum' | 'weather') => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -156,6 +157,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
             );
           })}
         </div>
+      </div>
+
+      {/* Weather Quick Access */}
+      <div className="px-3 pb-3">
+        <button
+          onClick={() => onSelectTab('weather')}
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-[#5de6ff]/10 hover:bg-[#5de6ff]/20 border border-[#5de6ff]/20 text-[#5de6ff] transition-all cursor-pointer text-sm font-medium"
+        >
+          <Cloud className="w-4 h-4" />
+          <span>Météo Burundi</span>
+        </button>
       </div>
 
       {/* Footer Info */}

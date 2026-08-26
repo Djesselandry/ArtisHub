@@ -19,6 +19,7 @@ interface RecruitmentViewProps {
   onOpenPostAd: () => void;
   onApplyAd: (ad: CollaborationAd) => void;
   onRequireAuth: () => void;
+  onContactWhatsApp: (ad: CollaborationAd) => void;
   filterAuthor?: string | null;
 }
 
@@ -28,6 +29,7 @@ export const RecruitmentView: React.FC<RecruitmentViewProps> = ({
   onOpenPostAd,
   onApplyAd,
   onRequireAuth,
+  onContactWhatsApp,
   filterAuthor,
 }) => {
   const [selectedRole, setSelectedRole] = useState<string>('All');
@@ -244,7 +246,7 @@ export const RecruitmentView: React.FC<RecruitmentViewProps> = ({
                 </div>
 
                 <button
-                  onClick={() => onApplyAd(ad)}
+                  onClick={() => ad.status === 'AVAILABLE' && ad.authorWhatsappNumber ? onContactWhatsApp(ad) : onApplyAd(ad)}
                   className={`px-5 py-2 rounded-xl text-xs font-mono font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 cursor-pointer ${
                     ad.status === 'HIRING'
                       ? 'bg-[#ddb7ff] hover:bg-[#f0dbff] text-[#490080] shadow-md shadow-[#ddb7ff]/20'
@@ -252,7 +254,7 @@ export const RecruitmentView: React.FC<RecruitmentViewProps> = ({
                   }`}
                 >
                   <Send className="w-3.5 h-3.5" />
-                  <span>{ad.status === 'HIRING' ? 'Postuler (Apply)' : 'Contacter'}</span>
+                  <span>{ad.status === 'HIRING' ? 'Postuler (Apply)' : ad.authorWhatsappNumber ? 'WhatsApp' : 'Contacter'}</span>
                 </button>
               </div>
             </div>

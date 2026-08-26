@@ -59,6 +59,7 @@ export const PostAdModal: React.FC<PostAdModalProps> = ({
         tags: parsedTags.length > 0 ? parsedTags : ['Collaboration'],
         compensation: compensation.trim(),
         contactEmail: contactEmail.trim() || currentUser.email,
+        authorWhatsappNumber: currentUser.whatsappEnabled ? currentUser.whatsappNumber : undefined,
       });
 
       confetti({

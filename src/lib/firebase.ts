@@ -319,6 +319,23 @@ export const signOut = async () => {
   notifyAuth();
 };
 
+export const updateUserProfile = async (uid: string, updates: Partial<UserProfile>): Promise<UserProfile> => {
+  const currentProfile = localCurrentUser?.uid === uid
+    ? localCurrentUser
+    : customUsers.find((user) => user.uid === uid) || DEMO_USERS.find((user) => user.uid === uid);
+  if (!currentProfile) throw new Error('Profil utilisateur introuvable.');
+
+  const updatedProfile = { ...currentProfile, ...updates };
+  if (isFirebaseLive && dbInstance) await setDoc(doc(dbInstance, 'users', uid), updatedProfile, { merge: true });
+  customUsers = customUsers.map((user) => user.uid === uid ? updatedProfile : user);
+  localStorage.setItem(STORAGE_KEYS.CUSTOM_USERS, JSON.stringify(customUsers));
+  if (localCurrentUser?.uid === uid) {
+    localCurrentUser = updatedProfile;
+    notifyAuth();
+  }
+  return updatedProfile;
+};
+
 // ----------------------------------------------------
 // PROJECTS (FIRESTORE COLLECTION: `projects`)
 // ----------------------------------------------------

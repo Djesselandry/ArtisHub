@@ -4,6 +4,8 @@ export interface UserProfile {
   displayName: string;
   avatar: string;
   role: string;
+  whatsappNumber?: string;
+  whatsappEnabled?: boolean;
   bio?: string;
   handle: string;
   followersCount?: number;
@@ -110,6 +112,7 @@ export interface CollaborationAd {
   compensation?: string;
   applications?: CollaborationApplication[];
   contactEmail?: string;
+  authorWhatsappNumber?: string;
 }
 
 export type ForumCategory = 'tips' | 'critiques' | 'news' | 'general';

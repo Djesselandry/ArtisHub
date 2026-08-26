@@ -12,18 +12,20 @@ import {
   X, 
   Upload, 
   MessageSquarePlus, 
-  PlusCircle 
+  PlusCircle,
+  Cloud 
 } from 'lucide-react';
 
 interface NavbarProps {
-  currentTab: 'feed' | 'recruitment' | 'forum';
-  onSelectTab: (tab: 'feed' | 'recruitment' | 'forum') => void;
+  currentTab: 'feed' | 'recruitment' | 'forum' | 'weather';
+  onSelectTab: (tab: 'feed' | 'recruitment' | 'forum' | 'weather') => void;
   currentUser: UserProfile | null;
   onOpenAuth: () => void;
   onOpenPostWork: () => void;
   onOpenPostAd: () => void;
   onOpenNewThread: () => void;
   onOpenFirebaseConfig: () => void;
+  onOpenWhatsAppSettings: () => void;
   searchQuery: string;
   onSearchChange: (q: string) => void;
 }
@@ -37,6 +39,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenPostAd,
   onOpenNewThread,
   onOpenFirebaseConfig,
+  onOpenWhatsAppSettings,
   searchQuery,
   onSearchChange,
 }) => {
@@ -116,6 +119,16 @@ export const Navbar: React.FC<NavbarProps> = ({
           }`}
         >
           Forum
+        </button>
+        <button
+          onClick={() => onSelectTab('weather')}
+          className={`text-sm transition-all relative py-1 cursor-pointer font-medium ${
+            currentTab === 'weather'
+              ? 'text-[#ddb7ff] font-bold after:content-[""] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-[#5de6ff] after:shadow-[0_0_8px_rgba(93,230,255,0.7)]'
+              : 'text-[#cfc2d6] hover:text-[#e5e1e4]'
+          }`}
+        >
+          <span className="flex items-center gap-1"><Cloud className="w-3.5 h-3.5" />Météo</span>
         </button>
       </nav>
 
@@ -215,6 +228,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                     onClick={(e) => {
                       e.stopPropagation();
                       setProfileDropdownOpen(false);
+                      onOpenWhatsAppSettings();
+                    }}
+                    className="w-full flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-white/5 text-xs text-[#cfc2d6]"
+                  >
+                    <span className="text-[#5de6ff]">◉</span>
+                    <span>Préférences WhatsApp</span>
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setProfileDropdownOpen(false);
                       onOpenFirebaseConfig();
                     }}
                     className="w-full flex items-center justify-between px-2 py-1.5 rounded-lg hover:bg-white/5 text-xs text-[#cfc2d6]"
@@ -300,6 +324,17 @@ export const Navbar: React.FC<NavbarProps> = ({
               }`}
             >
               💬 Forum Discussions & Critiques
+            </button>
+            <button
+              onClick={() => {
+                onSelectTab('weather');
+                setMobileNavOpen(false);
+              }}
+              className={`text-left px-3 py-2 rounded-lg text-sm font-medium ${
+                currentTab === 'weather' ? 'bg-[#ddb7ff]/10 text-[#ddb7ff]' : 'text-[#cfc2d6]'
+              }`}
+            >
+              🌤️ Météo Burundi
             </button>
           </div>
 
