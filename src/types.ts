@@ -155,3 +155,56 @@ export interface ForumTopic {
   likes?: number;
   likedBy?: string[];
 }
+
+export type ProductCategory = 'Art' | 'Illustration' | '3D Model' | 'Music' | 'Game Asset' | 'Template' | 'Tutorial' | 'Other';
+export type PaymentStatus = 'pending' | 'completed' | 'failed' | 'refunded';
+export type PaymentMethod = 'mobile_money' | 'card' | 'paypal' | 'crypto';
+
+export interface Product {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  currency: string;
+  imageUrl: string;
+  additionalImages?: string[];
+  category: ProductCategory;
+  tags: string[];
+  authorUid: string;
+  author: string;
+  authorHandle: string;
+  authorAvatar: string;
+  likes: number;
+  likedBy: string[];
+  downloadCount: number;
+  rating: number;
+  ratingCount: number;
+  createdAt: string;
+  featured?: boolean;
+}
+
+export interface CartItem {
+  product: Product;
+  quantity: number;
+}
+
+export interface Order {
+  id: string;
+  buyerUid: string;
+  buyerEmail: string;
+  items: CartItem[];
+  total: number;
+  currency: string;
+  paymentMethod: PaymentMethod;
+  paymentStatus: PaymentStatus;
+  createdAt: string;
+}
+
+export interface PaymentPayload {
+  orderId: string;
+  amount: number;
+  currency: string;
+  method: PaymentMethod;
+  phone?: string;
+  cardToken?: string;
+}

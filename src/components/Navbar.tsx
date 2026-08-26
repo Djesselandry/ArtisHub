@@ -13,12 +13,13 @@ import {
   Upload, 
   MessageSquarePlus, 
   PlusCircle,
-  Cloud 
+  Cloud,
+  ShoppingBag 
 } from 'lucide-react';
 
 interface NavbarProps {
-  currentTab: 'feed' | 'recruitment' | 'forum' | 'weather';
-  onSelectTab: (tab: 'feed' | 'recruitment' | 'forum' | 'weather') => void;
+  currentTab: 'feed' | 'recruitment' | 'forum' | 'weather' | 'store';
+  onSelectTab: (tab: 'feed' | 'recruitment' | 'forum' | 'weather' | 'store') => void;
   currentUser: UserProfile | null;
   onOpenAuth: () => void;
   onOpenPostWork: () => void;
@@ -129,6 +130,16 @@ export const Navbar: React.FC<NavbarProps> = ({
           }`}
         >
           <span className="flex items-center gap-1"><Cloud className="w-3.5 h-3.5" />Météo</span>
+        </button>
+        <button
+          onClick={() => onSelectTab('store')}
+          className={`text-sm transition-all relative py-1 cursor-pointer font-medium ${
+            currentTab === 'store'
+              ? 'text-[#ddb7ff] font-bold after:content-[""] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-[#25D366] after:shadow-[0_0_8px_rgba(37,211,102,0.7)]'
+              : 'text-[#cfc2d6] hover:text-[#e5e1e4]'
+          }`}
+        >
+          <span className="flex items-center gap-1"><ShoppingBag className="w-3.5 h-3.5" />Boutique</span>
         </button>
       </nav>
 
@@ -335,6 +346,17 @@ export const Navbar: React.FC<NavbarProps> = ({
               }`}
             >
               🌤️ Météo Burundi
+            </button>
+            <button
+              onClick={() => {
+                onSelectTab('store');
+                setMobileNavOpen(false);
+              }}
+              className={`text-left px-3 py-2 rounded-lg text-sm font-medium ${
+                currentTab === 'store' ? 'bg-[#25D366]/10 text-[#25D366]' : 'text-[#cfc2d6]'
+              }`}
+            >
+              🛒 Boutique ArtisHub
             </button>
           </div>
 

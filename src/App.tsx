@@ -15,7 +15,9 @@ import {
   Project, 
   CollaborationAd, 
   ForumTopic, 
-  UserProfile 
+  UserProfile,
+  Product,
+  CartItem 
 } from './types';
 import { Navbar } from './components/Navbar';
 import { Sidebar } from './components/Sidebar';
@@ -24,6 +26,7 @@ import { FeedView } from './components/Views/FeedView';
 import { RecruitmentView } from './components/Views/RecruitmentView';
 import { ForumView } from './components/Views/ForumView';
 import { WeatherView } from './components/Views/WeatherView';
+import { StoreView } from './components/Views/StoreView';
 
 // Modals
 import { PostWorkModal } from './components/Modals/PostWorkModal';
@@ -37,10 +40,12 @@ import { WhatsAppSettingsModal } from './components/Modals/WhatsAppSettingsModal
 import { WhatsAppContactModal } from './components/Modals/WhatsAppContactModal';
 import { WhatsAppFloat } from './components/WhatsAppFloat';
 import { WhatsAppChatWidget } from './components/WhatsAppChatWidget';
+import { PaymentModal } from './components/Modals/PaymentModal';
+import { CartWidget } from './components/Modals/CartWidget';
 
 export default function App() {
   // Navigation State
-  const [currentTab, setCurrentTab] = useState<'feed' | 'recruitment' | 'forum' | 'weather'>('feed');
+  const [currentTab, setCurrentTab] = useState<'feed' | 'recruitment' | 'forum' | 'weather' | 'store'>('feed');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -64,6 +69,37 @@ export default function App() {
   const [whatsAppSettingsOpen, setWhatsAppSettingsOpen] = useState(false);
   const [whatsAppAd, setWhatsAppAd] = useState<CollaborationAd | null>(null);
   const [chatWidgetOpen, setChatWidgetOpen] = useState(false);
+
+  // Store State
+  const [products] = useState<Product[]>([]);
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [paymentOpen, setPaymentOpen] = useState(false);
+
+  const addToCart = (product: Product) => {
+    setCart((prev) => {
+      const existing = prev.find((item) => item.product.id === product.id);
+      if (existing) {
+        return prev.map((item) =>
+          item.product.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+        );
+      }
+      return [...prev, { product, quantity: 1 }];
+    });
+    setCartOpen(true);
+  };
+
+  const removeFromCart = (productId: string) => {
+    setCart((prev) => prev.filter((item) => item.product.id !== productId));
+  };
+
+  const updateCartQuantity = (productId: string, quantity: number) => {
+    setCart((prev) =>
+      prev.map((item) =>
+        item.product.id === productId ? { ...item, quantity } : item
+      )
+    );
+  };
 
   // Subscribe to real-time updates (Firebase Firestore / Reactive Local Store)
   useEffect(() => {
@@ -185,6 +221,17 @@ export default function App() {
           )}
 
           {currentTab === 'weather' && <WeatherView />}
+
+          {currentTab === 'store' && (
+            <StoreView
+              products={products}
+              currentUser={currentUser}
+              searchQuery={searchQuery}
+              onAddToCart={addToCart}
+              onOpenCart={() => setCartOpen(true)}
+              onRequireAuth={() => setAuthModalOpen(true)}
+            />
+          )}
         </main>
       </div>
 
@@ -297,6 +344,25 @@ export default function App() {
       {chatWidgetOpen && (
         <WhatsAppChatWidget
           onClose={() => setChatWidgetOpen(false)}
+        />
+      )}
+
+      {/* Cart & Payment */}
+      {cartOpen && (
+        <CartWidget
+          items={cart}
+          onRemove={removeFromCart}
+          onUpdateQuantity={updateCartQuantity}
+          onCheckout={() => { setCartOpen(false); setPaymentOpen(true); }}
+          onClose={() => setCartOpen(false)}
+        />
+      )}
+      {paymentOpen && (
+        <PaymentModal
+          items={cart}
+          total={cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0)}
+          onClose={() => setPaymentOpen(false)}
+          onSuccess={() => { setPaymentOpen(false); setCart([]); }}
         />
       )}
     </div>
