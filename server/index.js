@@ -15,7 +15,7 @@ const graphApiBaseUrl = `https://graph.facebook.com/${graphApiVersion}`;
 app.use(express.json({ limit: '100kb' }));
 app.use((req, res, next) => {
   const allowedOrigin = process.env.APP_URL || 'http://localhost:3000';
-  res.header('Access-Control-Allow-Origin', allowedOrigin);
+  res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   if (req.method === 'OPTIONS') return res.sendStatus(204);
@@ -42,6 +42,7 @@ app.get('/api/health', (_req, res) => {
 app.post('/api/whatsapp/send', async (req, res) => {
   try {
     const { accessToken, phoneNumberId } = requireWhatsAppConfig();
+    console.log('[WhatsApp] Request body:', JSON.stringify(req.body));
     const recipientPhone = normalizePhoneNumber(req.body?.recipientPhone || process.env.WHATSAPP_RECIPIENT_PHONE);
     const message = String(req.body?.message || '').trim();
 
@@ -74,6 +75,7 @@ app.post('/api/whatsapp/send', async (req, res) => {
     if (!response.ok) return res.status(response.status).json({ error: payload.error?.message || 'WhatsApp API request failed.', details: payload });
     return res.status(202).json({ messageId: payload.messages?.[0]?.id || null });
   } catch (error) {
+    console.error('[WhatsApp] ERROR:', error.message, error.statusCode || '');
     return res.status(error.statusCode || 500).json({ error: error.message || 'Unable to send WhatsApp message.' });
   }
 });
