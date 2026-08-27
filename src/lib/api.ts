@@ -70,3 +70,23 @@ export const fetchUserOrders = async (uid: string) => {
   // TODO: GET /api/orders?uid=:uid
   return { orders: [] };
 };
+
+// ========================================================================
+// GOOGLE SHEETS LOGGING
+// Envoie une ligne de log vers le serveur qui l'écrit dans une Google Sheet.
+// ========================================================================
+
+export const logToSheets = async (entity: string, data: Record<string, unknown>): Promise<{ ok: boolean; error?: string }> => {
+  try {
+    const response = await fetch(`${apiBaseUrl}/api/sheets/log`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ entity, ...data }),
+    });
+    const payload = await response.json();
+    if (!response.ok) return { ok: false, error: payload.error };
+    return { ok: true };
+  } catch {
+    return { ok: false, error: 'Serveur injoignable' };
+  }
+};

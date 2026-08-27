@@ -23,6 +23,7 @@ import {
 } from 'firebase/firestore';
 import { Project, CollaborationAd, ForumTopic, UserProfile, ProjectComment, ForumReply, CollaborationApplication } from '../types';
 import { INITIAL_PROJECTS, INITIAL_COLLABORATIONS, INITIAL_FORUM_TOPICS, DEMO_USERS } from './initialData';
+import { logToSheets } from './api';
 
 // Check if Firebase config is supplied via env or custom storage
 const getFirebaseConfig = () => {
@@ -333,6 +334,17 @@ export const updateUserProfile = async (uid: string, updates: Partial<UserProfil
     localCurrentUser = updatedProfile;
     notifyAuth();
   }
+
+  // Journaliser la modification dans Google Sheets (côté serveur)
+  logToSheets('profile', {
+    email: updatedProfile.email,
+    uid: updatedProfile.uid,
+    displayName: updatedProfile.displayName,
+    detail: `Rôle: ${updatedProfile.role || ''} | Handle: ${updatedProfile.handle || ''} | Avatar modifié: ${Boolean(updates.avatar)}`,
+  }).then((res) => {
+    if (!res.ok) console.warn('[Sheets] Échec du log profil:', res.error);
+  });
+
   return updatedProfile;
 };
 

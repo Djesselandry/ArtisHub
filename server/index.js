@@ -8,6 +8,7 @@ config({ path: join(__dirname, '.env') });
 
 import express from 'express';
 import https from 'https';
+import { appendRow, isSheetsConfigured } from './sheets.js';
 
 const app = express();
 const port = Number(process.env.PORT || 3001);
@@ -52,7 +53,7 @@ const requireWhatsAppConfig = () => {
 const normalizePhoneNumber = (value) => String(value || '').replace(/[^\d]/g, '');
 
 app.get('/api/health', (_req, res) => {
-  res.json({ ok: true, whatsappConfigured: Boolean(process.env.WHATSAPP_ACCESS_TOKEN && process.env.WHATSAPP_PHONE_NUMBER_ID) });
+  res.json({ ok: true, whatsappConfigured: Boolean(process.env.WHATSAPP_ACCESS_TOKEN && process.env.WHATSAPP_PHONE_NUMBER_ID), sheetsConfigured: isSheetsConfigured() });
 });
 
 app.post('/api/whatsapp/send', async (req, res) => {
@@ -140,6 +141,23 @@ app.post('/api/reports', (req, res) => {
 
 app.get('/api/reports', (_req, res) => {
   return res.json(loadReports());
+});
+
+// ----------------------------------------------------
+// GOOGLE SHEETS LOGGING
+// ----------------------------------------------------
+app.post('/api/sheets/log', async (req, res) => {
+  try {
+    const { entity, ...data } = req.body || {};
+    if (!entity) return res.status(400).json({ error: 'entity is required.' });
+    if (!isSheetsConfigured()) return res.status(503).json({ error: 'Google Sheets not configured on the server.' });
+
+    const result = await appendRow(entity, data);
+    if (!result.ok) return res.status(500).json({ error: result.error });
+    return res.status(201).json(result);
+  } catch (error) {
+    return res.status(500).json({ error: error.message || 'Unable to log to Google Sheets.' });
+  }
 });
 
 app.listen(port, () => {

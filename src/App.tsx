@@ -350,7 +350,7 @@ export default function App() {
       {whatsAppAd && <WhatsAppContactModal ad={whatsAppAd} onClose={() => setWhatsAppAd(null)} />}
 
       {/* WhatsApp Floating Chat Widget */}
-      <WhatsAppFloat onClick={() => setChatWidgetOpen(true)} isOpen={chatWidgetOpen} />
+      <WhatsAppFloat onClick={() => setChatWidgetOpen(true)} isOpen={chatWidgetOpen} onOpenWeather={() => setCurrentTab('weather')} />
       {chatWidgetOpen && (
         <WhatsAppChatWidget
           onClose={() => setChatWidgetOpen(false)}
