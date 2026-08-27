@@ -14,7 +14,8 @@ import {
   MessageSquarePlus, 
   PlusCircle,
   Cloud,
-  ShoppingBag 
+  ShoppingBag,
+  Settings
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -27,6 +28,7 @@ interface NavbarProps {
   onOpenNewThread: () => void;
   onOpenFirebaseConfig: () => void;
   onOpenWhatsAppSettings: () => void;
+  onOpenProfileSettings: () => void;
   searchQuery: string;
   onSearchChange: (q: string) => void;
 }
@@ -41,6 +43,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenNewThread,
   onOpenFirebaseConfig,
   onOpenWhatsAppSettings,
+  onOpenProfileSettings,
   searchQuery,
   onSearchChange,
 }) => {
@@ -206,6 +209,18 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <div className="text-[10px] font-mono text-[#cfc2d6]/60 truncate">{currentUser.handle}</div>
                   </div>
                 </div>
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setProfileDropdownOpen(false);
+                    onOpenProfileSettings();
+                  }}
+                  className="w-full flex items-center gap-2 px-2 py-2 mb-1 rounded-lg hover:bg-[#ddb7ff]/10 text-xs text-[#ddb7ff] transition-colors"
+                >
+                  <Settings className="w-3.5 h-3.5" />
+                  <span>Modifier mon profil</span>
+                </button>
 
                 {/* Switch Demo user list */}
                 <div className="py-1">

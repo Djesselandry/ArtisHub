@@ -37,6 +37,7 @@ import { CreateThreadModal } from './components/Modals/CreateThreadModal';
 import { ThreadDetailModal } from './components/Modals/ThreadDetailModal';
 import { FirebaseConfigModal } from './components/Modals/FirebaseConfigModal';
 import { WhatsAppSettingsModal } from './components/Modals/WhatsAppSettingsModal';
+import { ProfileSettingsModal } from './components/Modals/ProfileSettingsModal';
 import { WhatsAppContactModal } from './components/Modals/WhatsAppContactModal';
 import { WhatsAppFloat } from './components/WhatsAppFloat';
 import { WhatsAppChatWidget } from './components/WhatsAppChatWidget';
@@ -67,6 +68,7 @@ export default function App() {
   const [selectedTopic, setSelectedTopic] = useState<ForumTopic | null>(null);
   const [firebaseConfigModalOpen, setFirebaseConfigModalOpen] = useState(false);
   const [whatsAppSettingsOpen, setWhatsAppSettingsOpen] = useState(false);
+  const [profileSettingsOpen, setProfileSettingsOpen] = useState(false);
   const [whatsAppAd, setWhatsAppAd] = useState<CollaborationAd | null>(null);
   const [chatWidgetOpen, setChatWidgetOpen] = useState(false);
 
@@ -178,6 +180,7 @@ export default function App() {
           onOpenNewThread={() => setCreateThreadModalOpen(true)}
           onOpenFirebaseConfig={() => setFirebaseConfigModalOpen(true)}
           onOpenWhatsAppSettings={() => setWhatsAppSettingsOpen(true)}
+          onOpenProfileSettings={() => setProfileSettingsOpen(true)}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
         />
@@ -334,6 +337,13 @@ export default function App() {
         <WhatsAppSettingsModal
           currentUser={currentUser}
           onClose={() => setWhatsAppSettingsOpen(false)}
+          onSaved={setCurrentUser}
+        />
+      )}
+      {profileSettingsOpen && currentUser && (
+        <ProfileSettingsModal
+          currentUser={currentUser}
+          onClose={() => setProfileSettingsOpen(false)}
           onSaved={setCurrentUser}
         />
       )}
