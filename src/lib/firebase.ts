@@ -63,6 +63,8 @@ if (firebaseConfig && firebaseConfig.apiKey) {
     dbInstance = getFirestore(app);
     isFirebaseLive = true;
     console.log('🔥 ArtisHub: Firebase initialized with live backend!');
+    // Force sign-out on startup so no user is shown by default
+    firebaseSignOut(authInstance).catch(() => {});
   } catch (err) {
     console.warn('⚠️ ArtisHub: Firebase config found but init failed, falling back to local store:', err);
     isFirebaseLive = false;
@@ -97,7 +99,7 @@ const loadInitial = <T>(key: string, fallback: T): T => {
 let localProjects: Project[] = loadInitial(STORAGE_KEYS.PROJECTS, INITIAL_PROJECTS);
 let localCollaborations: CollaborationAd[] = loadInitial(STORAGE_KEYS.COLLABS, INITIAL_COLLABORATIONS);
 let localForumTopics: ForumTopic[] = loadInitial(STORAGE_KEYS.FORUM, INITIAL_FORUM_TOPICS);
-let localCurrentUser: UserProfile | null = loadInitial(STORAGE_KEYS.CURRENT_USER, DEMO_USERS[0]);
+let localCurrentUser: UserProfile | null = null;
 let customUsers: UserProfile[] = loadInitial(STORAGE_KEYS.CUSTOM_USERS, []);
 
 type Listener<T> = (data: T) => void;
@@ -284,6 +286,12 @@ export const signUp = async (email: string, pass: string, displayName: string, r
     await saveLiveUserProfile(newProfile);
     localCurrentUser = newProfile;
     notifyAuth();
+    logToSheets('inscription', {
+      email: newProfile.email,
+      uid: newProfile.uid,
+      name: newProfile.displayName,
+      detail: `Inscription via formulaire (${newProfile.role})`,
+    });
     return newProfile;
   }
 
@@ -304,6 +312,12 @@ export const signUp = async (email: string, pass: string, displayName: string, r
   localStorage.setItem(STORAGE_KEYS.CUSTOM_USERS, JSON.stringify(customUsers));
   localCurrentUser = newProfile;
   notifyAuth();
+  logToSheets('inscription', {
+    email: newProfile.email,
+    uid: newProfile.uid,
+    name: newProfile.displayName,
+    detail: `Inscription via formulaire (${newProfile.role})`,
+  });
   return newProfile;
 };
 
