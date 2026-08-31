@@ -79,30 +79,16 @@ export const fetchUserOrders = async (uid: string) => {
 
 export const logToSheets = async (entity: string, data: Record<string, unknown>): Promise<{ ok: boolean; error?: string }> => {
   const payload = { entity, ...data };
+  if (!appsScriptUrl) return { ok: false, error: 'VITE_APPS_SCRIPT_URL non configuré' };
   try {
-    // Priorité : Google Apps Script (connexion directe à la Google Sheet, sans Service Account)
-    if (appsScriptUrl) {
-      const response = await fetch(appsScriptUrl, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(payload),
-      });
-      return { ok: true };
-    }
-  } catch {
-    // Ignorer l'échec Apps Script, on retombe sur le serveur Express
-  }
-  try {
-    const response = await fetch(`${apiBaseUrl}/api/sheets/log`, {
+    await fetch(appsScriptUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(payload),
     });
-    const payloadResp = await response.json();
-    if (!response.ok) return { ok: false, error: payloadResp.error };
     return { ok: true };
   } catch {
-    return { ok: false, error: 'Serveur injoignable' };
+    return { ok: false, error: 'Envoi Apps Script échoué' };
   }
 };
